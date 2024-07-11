@@ -10,7 +10,7 @@ import route from "./api/v1/routes/index.route";
 dotenv.config();
 
 const app: Application = express();
-const port: number | String = parseInt(process.env.PORT as string, 10) || 3456;
+const port: number | string = parseInt(process.env.PORT as string, 10) || 3456;
 
 // Middleware
 app.use(cors());

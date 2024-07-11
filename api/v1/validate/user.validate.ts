@@ -9,19 +9,24 @@ interface RegisterBody {
     confirmPassword: string;
 }
 
+interface LoginBody {
+    email: string;
+    password: string;
+}
+
 export const register = (req: Request<any, any, RegisterBody>, res: Response, next: NextFunction): Response | void => {
     const { fullName, email, password, confirmPassword } = req.body;
 
-    if (typeof fullName !== 'string') {
+    if (typeof fullName !== 'string' || !fullName) {
         return res.status(400).json({ error: "ValidationError", message: "Full name must be a string." });
     }
-    if (typeof email !== 'string') {
+    if (typeof email !== 'string' || !email) {
         return res.status(400).json({ error: "ValidationError", message: "Email must be a string." });
     }
-    if (typeof password !== 'string') {
+    if (typeof password !== 'string' || !password) {
         return res.status(400).json({ error: "ValidationError", message: "Password must be a string." });
     }
-    if (typeof confirmPassword !== 'string') {
+    if (typeof confirmPassword !== 'string' || !confirmPassword) {
         return res.status(400).json({ error: "ValidationError", message: "Confirm password must be a string." });
     }
 
@@ -30,6 +35,19 @@ export const register = (req: Request<any, any, RegisterBody>, res: Response, ne
     }
     if (!regex.test(password)) {
         return res.status(400).json({ error: "ValidationError", message: "Password must be at least 6 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)." });
+    }
+
+    return next();
+}
+
+export const login = (req: Request<any, any, LoginBody>, res: Response, next: NextFunction): Response | void => {
+    const { email, password } = req.body;
+
+    if (typeof email !== 'string' || !email) {
+        return res.status(400).json({ error: "ValidationError", message: "Email must be a string." });
+    }
+    if (typeof password !== 'string' || !password) {
+        return res.status(400).json({ error: "ValidationError", message: "Password must be a string." });
     }
 
     return next();
