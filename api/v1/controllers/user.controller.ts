@@ -49,3 +49,29 @@ export const logout = (req: Request, res: Response): Response => {
     res.clearCookie("token");
     return res.status(200).json({ message: 'Logout successful.' });
 }
+
+// [GET] /api/v1/user/information
+export const information = async (req: Request, res: Response): Promise<Response> => {
+    const currentUser = req["currentUser"];
+
+    return res.status(200).json({
+        message: "Information retrieved successfully",
+        information: {
+            _id: currentUser._id,
+            fullName: currentUser.fullName,
+            email: currentUser.email
+        }
+    });
+}
+
+// [GET] /api/v1/user/list
+export const listUser = async (req: Request, res: Response): Promise<Response> => {
+    const users = await User.find({
+        deleted: false
+    }).select("fullName email");
+
+    return res.status(200).json({
+        message: "List user retrieved successfully",
+        users: users
+    });
+}
